@@ -153,7 +153,7 @@ function Chip({
       className={
         active
           ? "bg-z-gold px-3 py-1.5 text-[0.7rem] font-semibold uppercase tracking-[0.12em] text-z-bg"
-          : "border border-z-line px-3 py-1.5 text-[0.7rem] uppercase tracking-[0.12em] text-z-muted transition hover:border-z-gold/40 hover:text-z-ink"
+          : "bg-transparent px-3 py-1.5 text-[0.7rem] uppercase tracking-[0.12em] text-z-muted/70 transition hover:text-z-ink"
       }
     >
       {children}
@@ -184,10 +184,10 @@ export function ResultsSection({
 
   const [range, setRange] = useState<Range>("years");
   const [selectedYears, setSelectedYears] = useState<Set<number>>(
-    () => new Set(years),
+    () => new Set(years.length ? [years[0]] : []),
   );
   const [selectedMonths, setSelectedMonths] = useState<Set<number>>(
-    () => new Set([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]),
+    () => new Set([1]),
   );
 
   const activeYears = useMemo(() => {
