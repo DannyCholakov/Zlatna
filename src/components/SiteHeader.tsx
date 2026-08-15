@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { LanguageSwitch } from "@/components/LanguageSwitch";
 import { Wordmark } from "@/components/Wordmark";
 import type { Dictionary } from "@/i18n/dictionaries";
@@ -28,6 +31,15 @@ export function SiteHeader({
   locale: Locale;
   dict: Dictionary;
 }) {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   const links = [
     { href: `#why-gold`, label: dict.nav.whyGold },
     { href: `#method`, label: dict.nav.method },
@@ -37,7 +49,13 @@ export function SiteHeader({
   ];
 
   return (
-    <header className="sticky top-0 z-50 border-b border-z-line bg-z-panel/95 backdrop-blur-md">
+    <header
+      className={
+        scrolled
+          ? "fixed inset-x-0 top-0 z-50 border-b border-z-line bg-z-panel/95 backdrop-blur-md transition-[background-color,border-color,backdrop-filter] duration-300"
+          : "fixed inset-x-0 top-0 z-50 border-b border-transparent bg-transparent transition-[background-color,border-color,backdrop-filter] duration-300"
+      }
+    >
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-4 md:px-10">
         <Link href={`/${locale}`} className="shrink-0 text-z-ink">
           <Wordmark className="h-7 w-auto md:h-8" />
@@ -59,7 +77,7 @@ export function SiteHeader({
             href={telegramUrl}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-2 bg-[#2AABEE] px-3 py-2 text-[0.75rem] font-semibold uppercase tracking-[0.12em] text-white shadow-[0_0_0_1px_rgba(255,255,255,0.12)] transition hover:bg-[#229ED9] sm:px-4"
+            className="inline-flex items-center gap-2 bg-z-gold px-3 py-2 text-[0.75rem] font-semibold uppercase tracking-[0.12em] text-z-bg transition hover:bg-z-gold-soft sm:px-4"
             aria-label={dict.nav.join}
           >
             <TelegramIcon className="h-4 w-4 shrink-0" />

@@ -15,7 +15,7 @@ export function HeroSection({ dict }: { dict: Dictionary }) {
       />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_40%,rgba(196,163,90,0.18),transparent_55%)]" />
 
-      <div className="relative mx-auto flex min-h-[calc(100svh-4.5rem)] max-w-6xl flex-col justify-end px-6 pb-20 pt-16 md:px-10 md:pb-28">
+      <div className="relative mx-auto flex min-h-[100svh] max-w-6xl flex-col justify-end px-6 pb-20 pt-32 md:px-10 md:pb-28">
         <p
           className="animate-rise font-display text-6xl leading-none tracking-[0.06em] text-z-ink md:text-8xl"
           style={{ animationDelay: "0ms" }}
