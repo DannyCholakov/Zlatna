@@ -94,7 +94,7 @@ export function ResultsSection({
                 {results.wrLabel}
               </dt>
               <dd className="mt-2 font-display text-3xl text-z-ink">
-                {demoBacktest.winRatePct.toFixed(1)}%
+                {demoBacktest.yearly.length}/{demoBacktest.yearsBacked}
               </dd>
             </div>
           </dl>

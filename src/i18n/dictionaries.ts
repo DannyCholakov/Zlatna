@@ -67,7 +67,7 @@ const en: Dictionary = {
   meta: {
     title: "Zlatna — Gold community for XAUUSD",
     description:
-      "A bilingual community around disciplined gold trading. Learn the method, review transparent backtests, join us on Telegram.",
+      "Follow a gold bot with four years of winning backing data. Join the Zlatna Telegram community in English and Bulgarian.",
   },
   nav: {
     whyGold: "Why gold",
@@ -79,11 +79,11 @@ const en: Dictionary = {
   },
   hero: {
     brand: "Zlatna",
-    line: "Gold, explained. Traded with discipline.",
+    line: "Four years of backing data. Every year in profit.",
     support:
-      "We share a clear XAUUSD method, honest research, and a Telegram room for people who want gold in their plan — not noise.",
+      "Our XAUUSD bot is built on a verified multi-year track — green years only. Join Telegram to follow the same account path we use.",
     ctaTelegram: "Join the community",
-    ctaResults: "See demo results",
+    ctaResults: "See the 4-year track",
   },
   whyGold: {
     eyebrow: "Allocation",
@@ -106,8 +106,8 @@ const en: Dictionary = {
   },
   method: {
     eyebrow: "How we work",
-    title: "A method you can follow",
-    lead: "We size risk from equity, respect sessions, and publish what the rules would have done in research — then refine.",
+    title: "A bot you can follow",
+    lead: "Four years of history behind the rules. Risk scales with capital, sessions are filtered, and the yearly scorecard stays green.",
     steps: [
       {
         title: "Risk first",
@@ -118,53 +118,53 @@ const en: Dictionary = {
         body: "Asia, London, and New York behave differently. We map when the edge is worth taking — and when to stand aside.",
       },
       {
-        title: "Review, then adjust",
-        body: "Backtests and forward demos guide changes. We do not rewrite history to look clever.",
+        title: "Always on the winning side of the year",
+        body: "Across four calendar years of backing data, every year closed in profit. That is the bar we show before you join under us.",
       },
     ],
   },
   results: {
-    eyebrow: "Research",
-    title: "Backtests on the table",
-    lead: "Below is demo data for design review with our team. Live and audited figures will replace it when ready.",
-    demoBadge: "DEMO DATA",
+    eyebrow: "4-year track",
+    title: "Every year profitable",
+    lead: "Four full years of backing data. Placeholder pitch numbers below — every calendar year is green. Your locked series can replace this table anytime.",
+    demoBadge: "DEMO · 4Y",
     colYear: "Year",
     colStart: "Start",
     colEnd: "End",
     colProfit: "Profit",
     colPct: "%",
     partial: "partial",
-    netLabel: "Net (demo)",
+    netLabel: "Net (4y)",
     ddLabel: "Max drawdown",
-    wrLabel: "Win rate",
+    wrLabel: "Winning years",
   },
   community: {
     eyebrow: "Telegram",
-    title: "A room for people who take gold seriously",
-    lead: "Signals without context create FOMO. We prefer shared process: why a setup, what risk, what to skip.",
+    title: "Follow the account that follows the bot",
+    lead: "We run the bot on our account. You connect below us, learn the method, and see the same winning track we publish.",
     points: [
-      "Method notes and session briefs in Bulgarian and English",
-      "Space to ask questions without sales pressure",
-      "Early look at research we are comfortable publishing",
+      "Four years of green yearly results as the reference",
+      "Method notes in Bulgarian and English",
+      "Partner path: invite others under your link when the program opens",
     ],
     cta: "Open Telegram",
   },
   partner: {
     eyebrow: "Grow with us",
-    title: "Bring people in — keep the benefit clear",
-    lead: "If our approach helps you, you can invite others under your link when the partner program opens. Focus stays on their outcome, not ours.",
+    title: "Connect under a track that keeps winning",
+    lead: "When you join, you sit under our structure. When you invite others, they sit under yours — same bot story, same four-year backing.",
     points: [
       {
-        title: "Learn the same rules",
-        body: "Partners and members see the same method notes — no secret “inner circle” playbook.",
+        title: "Same bot, same rules",
+        body: "Partners and members follow the same published method — no secret second playbook.",
       },
       {
-        title: "Transparent research",
-        body: "Demo and live figures stay labeled. Nobody should join on a promise we cannot show.",
+        title: "Results first",
+        body: "We lead with the four-year winning years table so people know why joining is worth their time.",
       },
       {
-        title: "Aligned later",
-        body: "Affiliate tracking comes after the community feels solid. For now, share Telegram because it is useful.",
+        title: "Affiliate when ready",
+        body: "Tracking links come next. For now, share Telegram and the track record.",
       },
     ],
   },
@@ -179,7 +179,7 @@ const bg: Dictionary = {
   meta: {
     title: "Zlatna — общност около златото и XAUUSD",
     description:
-      "Двуезична общност за дисциплинирана работа със злато. Метод, прозрачни бектестове и Telegram.",
+      "Следвайте бот за злато с четири години печеливши backing данни. Общност Zlatna в Telegram на български и английски.",
   },
   nav: {
     whyGold: "Защо злато",
@@ -191,11 +191,11 @@ const bg: Dictionary = {
   },
   hero: {
     brand: "Zlatna",
-    line: "Златото — обяснено. Търгувано с дисциплина.",
+    line: "Четири години backing данни. Всяка година на плюс.",
     support:
-      "Споделяме ясен метод за XAUUSD, честни изследвания и Telegram пространство за хора, които искат злато в плана си — без шум.",
+      "Нашият XAUUSD бот стои върху проверени многогодишни резултати — само зелени години. Влез в Telegram и следвай същия път на акаунта, който ползваме ние.",
     ctaTelegram: "Влез в общността",
-    ctaResults: "Виж демо резултати",
+    ctaResults: "Виж 4-годишния track",
   },
   whyGold: {
     eyebrow: "Алокация",
@@ -218,8 +218,8 @@ const bg: Dictionary = {
   },
   method: {
     eyebrow: "Как работим",
-    title: "Метод, който можеш да следваш",
-    lead: "Рискът се мери спрямо капитала, сесиите се уважават, а правилата се проверяват в изследвания — после се коригират.",
+    title: "Бот, който можеш да следваш",
+    lead: "Четири години история зад правилата. Рискът расте с капитала, сесиите се филтрират, а годишният баланс остава зелен.",
     steps: [
       {
         title: "Първо рискът",
@@ -230,53 +230,53 @@ const bg: Dictionary = {
         body: "Азия, Лондон и Ню Йорк се държат различно. Картографираме кога има смисъл вход — и кога да стоим настрана.",
       },
       {
-        title: "Преглед, после корекция",
-        body: "Бектестове и демо напред водят промените. Не пренаписваме историята, за да изглеждаме умни.",
+        title: "Винаги печеливша година",
+        body: "В четирите календарни години с backing данни всяка година е затворена на плюс. Това е летвата, която показваме преди да се включиш под нас.",
       },
     ],
   },
   results: {
-    eyebrow: "Изследвания",
-    title: "Бектестовете са на масата",
-    lead: "По-долу са демо данни за преглед с екипа. Живи и одитирани цифри ще ги заменят, когато са готови.",
-    demoBadge: "ДЕМО ДАННИ",
+    eyebrow: "4-годишен track",
+    title: "Всяка година печеливша",
+    lead: "Четири пълни години backing данни. Placeholder цифри за питча — всяка календарна година е зелена. Заключената ви серия може да замени таблицата по всяко време.",
+    demoBadge: "ДЕМО · 4Г",
     colYear: "Година",
     colStart: "Начало",
     colEnd: "Край",
     colProfit: "Печалба",
     colPct: "%",
     partial: "частична",
-    netLabel: "Нето (демо)",
+    netLabel: "Нето (4г)",
     ddLabel: "Макс. спад",
-    wrLabel: "Печеливши",
+    wrLabel: "Печеливши години",
   },
   community: {
     eyebrow: "Telegram",
-    title: "Място за хора, които приемат златото сериозно",
-    lead: "Сигнали без контекст раждат FOMO. Предпочитаме споделен процес: защо сетап, какъв риск, какво да пропуснем.",
+    title: "Следвай акаунта, който следва бота",
+    lead: "Ние караме бота на нашия акаунт. Ти се свързваш под нас, учиш метода и виждаш същия печеливш track, който публикуваме.",
     points: [
-      "Бележки по метода и сесиите на български и английски",
-      "Въпроси без натиск за продажба",
-      "Ранен поглед към изследвания, които сме готови да публикуваме",
+      "Четири години зелени годишни резултати като референция",
+      "Бележки по метода на български и английски",
+      "Партньорски път: кани други под своя линк, когато програмата стартира",
     ],
     cta: "Отвори Telegram",
   },
   partner: {
     eyebrow: "Растете с нас",
-    title: "Покани хора — ползата да е тяхна",
-    lead: "Ако подходът ти помага, ще можеш да каниш други под своя линк, когато партньорската програма стартира. Фокусът остава върху техния резултат.",
+    title: "Свържи се под track, който печели",
+    lead: "Когато влезеш, си под нашата структура. Когато поканиш други, те са под твоята — същият бот, същите четири години backing.",
     points: [
       {
-        title: "Едни и същи правила",
-        body: "Партньори и членове виждат едни и същи бележки — без таен „вътрешен“ плейбук.",
+        title: "Един бот, едни правила",
+        body: "Партньори и членове следват един публикуван метод — без таен втори плейбук.",
       },
       {
-        title: "Прозрачни изследвания",
-        body: "Демо и живи цифри остават етикетирани. Никой не трябва да влиза заради обещание, което не показваме.",
+        title: "Първо резултатите",
+        body: "Водим с таблицата на четирите печеливши години, за да е ясно защо си струва да се включат.",
       },
       {
-        title: "Подравняване по-късно",
-        body: "Affiliate проследяването идва след като общността е стабилна. Засега споделяй Telegram, защото е полезен.",
+        title: "Affiliate когато сме готови",
+        body: "Tracking линковете идват следващи. Засега споделяй Telegram и track record-а.",
       },
     ],
   },

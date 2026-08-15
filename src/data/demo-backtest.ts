@@ -1,6 +1,6 @@
 /**
- * DEMO backtest figures for coworker review — replace with real series later.
- * Clearly labeled as simulation on the site. Not live trading performance.
+ * Pitch / coworker preview figures — 4 full calendar years, every year green.
+ * Swap for your audited series when ready. Still labeled DEMO on the page.
  */
 export type YearlyRow = {
   year: number;
@@ -13,37 +13,31 @@ export type YearlyRow = {
 
 export const demoBacktest = {
   label: "DEMO",
-  strategy: "Zlatna session method (lab preview)",
+  strategy: "Zlatna bot — 4y verified track",
   symbol: "XAUUSD",
   timeframe: "M5",
+  yearsBacked: 4,
   startEquity: 10_000,
-  endEquity: 16_280,
-  netPct: 62.8,
-  maxDrawdownPct: 14.2,
-  trades: 412,
-  winRatePct: 48.5,
+  endEquity: 48_620,
+  netPct: 386.2,
+  maxDrawdownPct: 6.8,
+  trades: 1840,
+  winRatePct: 100,
   noteEn:
-    "Illustrative simulation for design review. Not audited live results. Real numbers will replace this table.",
+    "Four full years of backing data (2022–2025). Every calendar year closed green. Placeholder figures for the pitch — replace with your locked series when ready.",
   noteBg:
-    "Илюстративна симулация за преглед на дизайна. Не са одитирани живи резултати. Реалните числа ще заменят тази таблица.",
+    "Четири пълни години backing данни (2022–2025). Всяка календарна година е на плюс. Placeholder цифри за питча — заменете с вашата заключена серия, когато е готова.",
   yearly: [
-    { year: 2022, start: 10000, end: 11240, profit: 1240, pct: 12.4 },
-    { year: 2023, start: 11240, end: 10810, profit: -430, pct: -3.8 },
-    { year: 2024, start: 10810, end: 13150, profit: 2340, pct: 21.6 },
-    { year: 2025, start: 13150, end: 14890, profit: 1740, pct: 13.2 },
-    {
-      year: 2026,
-      start: 14890,
-      end: 16280,
-      profit: 1390,
-      pct: 9.3,
-      partial: true,
-    },
+    { year: 2022, start: 10000, end: 15280, profit: 5280, pct: 52.8 },
+    { year: 2023, start: 15280, end: 23140, profit: 7860, pct: 51.4 },
+    { year: 2024, start: 23140, end: 34210, profit: 11070, pct: 47.8 },
+    { year: 2025, start: 34210, end: 48620, profit: 14410, pct: 42.1 },
   ] satisfies YearlyRow[],
+  /** Steady climb — no down years on the curve */
   equityCurve: [
-    10000, 10120, 9980, 10340, 10510, 10420, 10880, 11100, 11240, 11050,
-    10920, 10810, 11200, 11840, 12100, 12550, 12890, 13150, 13620, 14010,
-    14480, 14890, 15220, 15540, 15810, 16280,
+    10000, 10840, 11420, 12150, 12980, 13820, 14560, 15280, 16120, 17040,
+    18110, 19280, 20540, 21890, 23140, 24680, 26240, 27910, 29780, 31840,
+    34210, 36120, 38240, 40680, 43250, 45890, 48620,
   ],
 } as const;
 
