@@ -48,7 +48,7 @@ export function HeroSection({ dict }: { dict: Dictionary }) {
           </a>
           <a
             href="#results"
-            className="border border-z-ink/25 px-6 py-3 text-sm tracking-wide text-z-ink transition hover:border-z-gold/50 hover:text-z-gold"
+            className="border border-z-ink/25 px-6 py-3 text-sm tracking-wide text-z-ink transition hover:border-z-panel hover:bg-z-panel hover:text-white"
           >
             {dict.hero.ctaResults}
           </a>
