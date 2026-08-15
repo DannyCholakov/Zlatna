@@ -49,6 +49,7 @@ export type Dictionary = {
     viewMonths: string;
     chartYears: string;
     chartMonths: string;
+    selectAll: string;
   };
   community: {
     eyebrow: string;
@@ -149,6 +150,7 @@ const en: Dictionary = {
     viewMonths: "Months",
     chartYears: "Equity by year",
     chartMonths: "Equity by month",
+    selectAll: "All",
   },
   community: {
     eyebrow: "Telegram",

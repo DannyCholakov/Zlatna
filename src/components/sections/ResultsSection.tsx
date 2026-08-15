@@ -26,8 +26,11 @@ const MONTH_ABBR = [
   "DEC",
 ] as const;
 
-const W = 640;
-const H = 160;
+const CHART_W = 640;
+const CHART_H = 220;
+const PAD = { top: 16, right: 12, bottom: 36, left: 58 };
+const PLOT_W = CHART_W - PAD.left - PAD.right;
+const PLOT_H = CHART_H - PAD.top - PAD.bottom;
 
 function toPoints(values: readonly number[]): { x: number; y: number }[] {
   if (values.length === 0) return [];
@@ -35,8 +38,10 @@ function toPoints(values: readonly number[]): { x: number; y: number }[] {
   const max = Math.max(...values);
   const span = max - min || 1;
   return values.map((v, i) => ({
-    x: values.length === 1 ? W / 2 : (i / (values.length - 1)) * W,
-    y: H - ((v - min) / span) * (H - 16) - 8,
+    x:
+      PAD.left +
+      (values.length === 1 ? PLOT_W / 2 : (i / (values.length - 1)) * PLOT_W),
+    y: PAD.top + PLOT_H - ((v - min) / span) * PLOT_H,
   }));
 }
 
@@ -44,11 +49,15 @@ function resample(
   pts: { x: number; y: number }[],
   n: number,
 ): { x: number; y: number }[] {
-  if (pts.length === 0)
-    return Array.from({ length: n }, () => ({ x: 0, y: H / 2 }));
+  if (pts.length === 0) {
+    return Array.from({ length: n }, (_, i) => ({
+      x: PAD.left + (i / Math.max(n - 1, 1)) * PLOT_W,
+      y: PAD.top + PLOT_H / 2,
+    }));
+  }
   if (pts.length === 1) {
     return Array.from({ length: n }, (_, i) => ({
-      x: (i / Math.max(n - 1, 1)) * W,
+      x: PAD.left + (i / Math.max(n - 1, 1)) * PLOT_W,
       y: pts[0].y,
     }));
   }
@@ -65,7 +74,7 @@ function resample(
     });
   }
   return out.map((p, i) => ({
-    x: n === 1 ? W / 2 : (i / (n - 1)) * W,
+    x: PAD.left + (n === 1 ? PLOT_W / 2 : (i / (n - 1)) * PLOT_W),
     y: p.y,
   }));
 }
@@ -76,63 +85,175 @@ function pointsToAttr(pts: { x: number; y: number }[]): string {
 
 function EquityChart({
   values,
+  xLabels,
   label,
+  locale,
 }: {
   values: readonly number[];
+  xLabels: string[];
   label: string;
+  locale: string;
 }) {
   const targetPts = useMemo(() => toPoints(values), [values]);
   const [drawPts, setDrawPts] = useState(() => targetPts);
   const fromRef = useRef(targetPts);
   const rafRef = useRef<number | null>(null);
 
+  const min = values.length ? Math.min(...values) : 0;
+  const max = values.length ? Math.max(...values) : 1;
+  const mid = (min + max) / 2;
+  const yTicks = [max, mid, min];
+
   useEffect(() => {
     const from = resample(fromRef.current, 48);
     const to = resample(targetPts, 48);
     const start = performance.now();
     const dur = 520;
-
     if (rafRef.current) cancelAnimationFrame(rafRef.current);
 
     const tick = (now: number) => {
       const t = Math.min(1, (now - start) / dur);
       const e = 1 - Math.pow(1 - t, 3);
-      const mixed = from.map((p, i) => ({
-        x: p.x + (to[i].x - p.x) * e,
-        y: p.y + (to[i].y - p.y) * e,
-      }));
-      setDrawPts(mixed);
-      if (t < 1) {
-        rafRef.current = requestAnimationFrame(tick);
-      } else {
+      setDrawPts(
+        from.map((p, i) => ({
+          x: p.x + (to[i].x - p.x) * e,
+          y: p.y + (to[i].y - p.y) * e,
+        })),
+      );
+      if (t < 1) rafRef.current = requestAnimationFrame(tick);
+      else {
         fromRef.current = targetPts;
         setDrawPts(targetPts);
       }
     };
-
     rafRef.current = requestAnimationFrame(tick);
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
   }, [targetPts]);
 
+  const bottomLabels = useMemo(() => {
+    if (xLabels.length === 0) return [];
+    if (xLabels.length <= 8) {
+      return xLabels.map((text, i) => ({
+        text,
+        x:
+          PAD.left +
+          (xLabels.length === 1
+            ? PLOT_W / 2
+            : (i / (xLabels.length - 1)) * PLOT_W),
+      }));
+    }
+    // Thin labels for dense month series
+    const step = Math.ceil(xLabels.length / 6);
+    const out: { text: string; x: number }[] = [];
+    for (let i = 0; i < xLabels.length; i += step) {
+      out.push({
+        text: xLabels[i],
+        x: PAD.left + (i / (xLabels.length - 1)) * PLOT_W,
+      });
+    }
+    const last = xLabels.length - 1;
+    if (out[out.length - 1]?.text !== xLabels[last]) {
+      out.push({
+        text: xLabels[last],
+        x: PAD.left + PLOT_W,
+      });
+    }
+    return out;
+  }, [xLabels]);
+
+  const areaPts =
+    drawPts.length > 0
+      ? `${pointsToAttr(drawPts)} ${PAD.left + PLOT_W},${PAD.top + PLOT_H} ${PAD.left},${PAD.top + PLOT_H}`
+      : "";
+
   return (
-    <svg
-      viewBox={`0 0 ${W} ${H}`}
-      className="h-40 w-full overflow-visible"
-      role="img"
-      aria-label={label}
-    >
-      <polyline
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        points={pointsToAttr(drawPts)}
-        className="text-z-gold"
-      />
-    </svg>
+    <div className="w-full">
+      <svg
+        viewBox={`0 0 ${CHART_W} ${CHART_H}`}
+        className="h-56 w-full"
+        role="img"
+        aria-label={label}
+      >
+        {yTicks.map((v, i) => {
+          const y =
+            PAD.top +
+            (i / Math.max(yTicks.length - 1, 1)) * PLOT_H;
+          return (
+            <g key={`y-${i}`}>
+              <line
+                x1={PAD.left}
+                x2={PAD.left + PLOT_W}
+                y1={y}
+                y2={y}
+                stroke="currentColor"
+                strokeWidth="1"
+                className="text-z-line"
+              />
+              <text
+                x={PAD.left - 8}
+                y={y + 3}
+                textAnchor="end"
+                className="fill-z-muted"
+                style={{ fontSize: 10 }}
+              >
+                {formatMoney(v, locale)}
+              </text>
+            </g>
+          );
+        })}
+
+        <line
+          x1={PAD.left}
+          x2={PAD.left}
+          y1={PAD.top}
+          y2={PAD.top + PLOT_H}
+          stroke="currentColor"
+          strokeWidth="1"
+          className="text-z-line"
+        />
+        <line
+          x1={PAD.left}
+          x2={PAD.left + PLOT_W}
+          y1={PAD.top + PLOT_H}
+          y2={PAD.top + PLOT_H}
+          stroke="currentColor"
+          strokeWidth="1"
+          className="text-z-line"
+        />
+
+        {areaPts ? (
+          <polygon
+            points={areaPts}
+            className="fill-z-gold/10"
+          />
+        ) : null}
+
+        <polyline
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.25"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          points={pointsToAttr(drawPts)}
+          className="text-z-gold"
+        />
+
+        {bottomLabels.map((l) => (
+          <text
+            key={`${l.text}-${l.x}`}
+            x={l.x}
+            y={CHART_H - 10}
+            textAnchor="middle"
+            className="fill-z-muted"
+            style={{ fontSize: 10 }}
+          >
+            {l.text}
+          </text>
+        ))}
+      </svg>
+    </div>
   );
 }
 
@@ -152,23 +273,13 @@ function Chip({
       aria-pressed={active}
       className={
         active
-          ? "bg-z-gold px-3 py-1.5 text-[0.7rem] font-semibold uppercase tracking-[0.12em] text-z-bg"
-          : "bg-transparent px-3 py-1.5 text-[0.7rem] uppercase tracking-[0.12em] text-z-muted/70 transition hover:text-z-ink"
+          ? "min-w-[2.75rem] bg-z-gold px-3 py-2 text-[0.7rem] font-semibold uppercase tracking-[0.12em] text-z-bg shadow-[inset_0_0_0_1px_rgba(196,163,90,1)]"
+          : "min-w-[2.75rem] border border-z-line/80 bg-z-panel/40 px-3 py-2 text-[0.7rem] uppercase tracking-[0.12em] text-z-muted transition hover:border-z-muted hover:text-z-ink"
       }
     >
       {children}
     </button>
   );
-}
-
-function toggleInSet(set: Set<number>, value: number): Set<number> {
-  const next = new Set(set);
-  if (next.has(value)) {
-    if (next.size > 1) next.delete(value);
-  } else {
-    next.add(value);
-  }
-  return next;
 }
 
 export function ResultsSection({
@@ -183,38 +294,43 @@ export function ResultsSection({
   const years = demoBacktest.yearly.map((y) => y.year);
 
   const [range, setRange] = useState<Range>("years");
-  const [selectedYears, setSelectedYears] = useState<Set<number>>(
-    () => new Set(years.length ? [years[0]] : []),
-  );
-  const [selectedMonths, setSelectedMonths] = useState<Set<number>>(
-    () => new Set([1]),
-  );
+  /** null = all selected */
+  const [yearPick, setYearPick] = useState<number | "all">(years[0] ?? "all");
+  const [monthPick, setMonthPick] = useState<number | "all">(1);
 
   const activeYears = useMemo(() => {
-    const sorted = [...selectedYears].sort((a, b) => a - b);
-    return sorted.length ? sorted : years;
-  }, [selectedYears, years]);
+    if (yearPick === "all") return years;
+    return [yearPick];
+  }, [yearPick, years]);
 
   const activeMonths = useMemo(() => {
-    const sorted = [...selectedMonths].sort((a, b) => a - b);
-    return sorted.length
-      ? sorted
-      : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-  }, [selectedMonths]);
+    if (monthPick === "all") return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+    return [monthPick];
+  }, [monthPick]);
 
-  const curve = useMemo(() => {
+  const { curve, xLabels } = useMemo(() => {
     if (range === "years") {
       const pts: number[] = [];
+      const labels: string[] = [];
       for (const y of demoBacktest.yearly) {
         if (!activeYears.includes(y.year)) continue;
-        if (pts.length === 0) pts.push(y.start);
+        if (pts.length === 0) {
+          pts.push(y.start);
+          labels.push(String(y.year));
+        }
         pts.push(y.end);
+        labels.push(String(y.year));
       }
-      return pts.length ? pts : demoBacktest.equityYearly;
+      return {
+        curve: pts.length ? pts : [...demoBacktest.equityYearly],
+        xLabels: labels.length
+          ? labels
+          : demoBacktest.yearly.map((y) => String(y.year)),
+      };
     }
 
-    // Month-end equity for selected year(s) × month(s)
     const pts: number[] = [];
+    const labels: string[] = [];
     let seeded = false;
     for (const row of demoBacktest.monthly) {
       const [ys, ms] = row.key.split("-").map(Number);
@@ -224,8 +340,16 @@ export function ResultsSection({
         seeded = true;
       }
       pts.push(row.end);
+      labels.push(
+        activeYears.length === 1
+          ? MONTH_ABBR[ms - 1]
+          : `${MONTH_ABBR[ms - 1]} ${String(ys).slice(2)}`,
+      );
     }
-    return pts.length ? pts : demoBacktest.equityMonthly;
+    return {
+      curve: pts.length ? pts : [...demoBacktest.equityMonthly],
+      xLabels: labels,
+    };
   }, [range, activeYears, activeMonths]);
 
   const rows = useMemo(() => {
@@ -279,7 +403,7 @@ export function ResultsSection({
           </span>
         </div>
 
-        <div className="mt-10 flex flex-col items-center gap-5">
+        <div className="mt-10 flex flex-col items-center gap-4">
           <div
             className="inline-flex border border-z-line p-1"
             role="tablist"
@@ -308,12 +432,22 @@ export function ResultsSection({
             ))}
           </div>
 
-          <div className="flex max-w-full flex-wrap justify-center gap-2">
+          <div
+            className="flex max-w-full flex-wrap justify-center gap-2"
+            role="group"
+            aria-label={results.colYear}
+          >
+            <Chip
+              active={yearPick === "all"}
+              onClick={() => setYearPick("all")}
+            >
+              {results.selectAll}
+            </Chip>
             {years.map((y) => (
               <Chip
                 key={y}
-                active={selectedYears.has(y)}
-                onClick={() => setSelectedYears((s) => toggleInSet(s, y))}
+                active={yearPick === y}
+                onClick={() => setYearPick(y)}
               >
                 {y}
               </Chip>
@@ -321,16 +455,24 @@ export function ResultsSection({
           </div>
 
           {range === "months" ? (
-            <div className="flex max-w-full flex-wrap justify-center gap-2">
+            <div
+              className="flex max-w-full flex-wrap justify-center gap-2"
+              role="group"
+              aria-label={results.colMonth}
+            >
+              <Chip
+                active={monthPick === "all"}
+                onClick={() => setMonthPick("all")}
+              >
+                {results.selectAll}
+              </Chip>
               {MONTH_ABBR.map((abbr, i) => {
                 const m = i + 1;
                 return (
                   <Chip
                     key={abbr}
-                    active={selectedMonths.has(m)}
-                    onClick={() =>
-                      setSelectedMonths((s) => toggleInSet(s, m))
-                    }
+                    active={monthPick === m}
+                    onClick={() => setMonthPick(m)}
                   >
                     {abbr}
                   </Chip>
@@ -340,17 +482,19 @@ export function ResultsSection({
           ) : null}
         </div>
 
-        <div className="mt-10 grid gap-10 border-t border-z-line pt-10 md:grid-cols-[1.2fr_0.8fr]">
-          <div className="text-z-gold">
+        <div className="mt-10 grid gap-10 border-t border-z-line pt-10 lg:grid-cols-[1.35fr_0.65fr]">
+          <div>
             <EquityChart
               values={curve}
+              xLabels={xLabels}
+              locale={locale}
               label={
                 range === "years" ? results.chartYears : results.chartMonths
               }
             />
-            <p className="mt-4 text-sm text-z-muted">{note}</p>
+            <p className="mt-3 text-sm leading-relaxed text-z-muted">{note}</p>
           </div>
-          <dl className="grid grid-cols-3 gap-6 self-center md:grid-cols-1 md:gap-8">
+          <dl className="grid grid-cols-3 gap-6 self-start border border-z-line bg-z-panel/50 p-6 lg:grid-cols-1 lg:gap-8">
             <div>
               <dt className="text-xs uppercase tracking-[0.16em] text-z-muted">
                 {results.netLabel}
