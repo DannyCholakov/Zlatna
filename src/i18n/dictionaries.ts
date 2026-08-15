@@ -35,6 +35,7 @@ export type Dictionary = {
     lead: string;
     demoBadge: string;
     colYear: string;
+    colMonth: string;
     colStart: string;
     colEnd: string;
     colProfit: string;
@@ -43,6 +44,11 @@ export type Dictionary = {
     netLabel: string;
     ddLabel: string;
     wrLabel: string;
+    rangeLabel: string;
+    viewYears: string;
+    viewMonths: string;
+    chartYears: string;
+    chartMonths: string;
   };
   community: {
     eyebrow: string;
@@ -126,9 +132,10 @@ const en: Dictionary = {
   results: {
     eyebrow: "4-year track",
     title: "Every year profitable",
-    lead: "Four full years of backing data. Placeholder pitch numbers below — every calendar year is green. Your locked series can replace this table anytime.",
+    lead: "Four full years of backing data. Switch between yearly and monthly views — demo numbers until your real series is ready.",
     demoBadge: "DEMO · 4Y",
     colYear: "Year",
+    colMonth: "Month",
     colStart: "Start",
     colEnd: "End",
     colProfit: "Profit",
@@ -137,6 +144,11 @@ const en: Dictionary = {
     netLabel: "Net (4y)",
     ddLabel: "Max drawdown",
     wrLabel: "Winning years",
+    rangeLabel: "Results range",
+    viewYears: "Years",
+    viewMonths: "Months",
+    chartYears: "Equity by year",
+    chartMonths: "Equity by month",
   },
   community: {
     eyebrow: "Telegram",
@@ -238,9 +250,10 @@ const bg: Dictionary = {
   results: {
     eyebrow: "4-годишен track",
     title: "Всяка година печеливша",
-    lead: "Четири пълни години backing данни. Placeholder цифри за питча — всяка календарна година е зелена. Заключената ви серия може да замени таблицата по всяко време.",
+    lead: "Четири пълни години backing данни. Превключвайте годишен и месечен изглед — демо цифри, докато реалната серия е готова.",
     demoBadge: "ДЕМО · 4Г",
     colYear: "Година",
+    colMonth: "Месец",
     colStart: "Начало",
     colEnd: "Край",
     colProfit: "Печалба",
@@ -249,6 +262,11 @@ const bg: Dictionary = {
     netLabel: "Нето (4г)",
     ddLabel: "Макс. спад",
     wrLabel: "Печеливши години",
+    rangeLabel: "Период на резултатите",
+    viewYears: "Години",
+    viewMonths: "Месеци",
+    chartYears: "Капитал по години",
+    chartMonths: "Капитал по месеци",
   },
   community: {
     eyebrow: "Telegram",

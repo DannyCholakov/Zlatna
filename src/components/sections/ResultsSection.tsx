@@ -1,36 +1,121 @@
+"use client";
+
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries";
 import {
   demoBacktest,
   formatMoney,
+  formatMonthLabel,
   formatPct,
 } from "@/data/demo-backtest";
 
-function EquitySparkline({ values }: { values: readonly number[] }) {
+type Range = "years" | "months";
+
+const W = 640;
+const H = 160;
+
+function toPoints(values: readonly number[]): { x: number; y: number }[] {
+  if (values.length === 0) return [];
   const min = Math.min(...values);
   const max = Math.max(...values);
-  const w = 640;
-  const h = 160;
-  const pts = values
-    .map((v, i) => {
-      const x = (i / (values.length - 1)) * w;
-      const y = h - ((v - min) / (max - min || 1)) * (h - 16) - 8;
-      return `${x},${y}`;
-    })
-    .join(" ");
+  const span = max - min || 1;
+  return values.map((v, i) => ({
+    x: values.length === 1 ? W / 2 : (i / (values.length - 1)) * W,
+    y: H - ((v - min) / span) * (H - 16) - 8,
+  }));
+}
+
+function resample(
+  pts: { x: number; y: number }[],
+  n: number,
+): { x: number; y: number }[] {
+  if (pts.length === 0) return Array.from({ length: n }, () => ({ x: 0, y: H / 2 }));
+  if (pts.length === 1) {
+    return Array.from({ length: n }, (_, i) => ({
+      x: (i / Math.max(n - 1, 1)) * W,
+      y: pts[0].y,
+    }));
+  }
+  const out: { x: number; y: number }[] = [];
+  for (let i = 0; i < n; i++) {
+    const t = n === 1 ? 0 : i / (n - 1);
+    const f = t * (pts.length - 1);
+    const i0 = Math.floor(f);
+    const i1 = Math.min(i0 + 1, pts.length - 1);
+    const u = f - i0;
+    out.push({
+      x: pts[i0].x + (pts[i1].x - pts[i0].x) * u,
+      y: pts[i0].y + (pts[i1].y - pts[i0].y) * u,
+    });
+  }
+  // Re-space x evenly for clean morph
+  return out.map((p, i) => ({
+    x: n === 1 ? W / 2 : (i / (n - 1)) * W,
+    y: p.y,
+  }));
+}
+
+function pointsToAttr(pts: { x: number; y: number }[]): string {
+  return pts.map((p) => `${p.x.toFixed(2)},${p.y.toFixed(2)}`).join(" ");
+}
+
+function EquityChart({
+  values,
+  label,
+}: {
+  values: readonly number[];
+  label: string;
+}) {
+  const targetPts = useMemo(() => toPoints(values), [values]);
+  const [drawPts, setDrawPts] = useState(() => targetPts);
+  const fromRef = useRef(targetPts);
+  const rafRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    const from = resample(fromRef.current, 48);
+    const to = resample(targetPts, 48);
+    const start = performance.now();
+    const dur = 520;
+
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - start) / dur);
+      const e = 1 - Math.pow(1 - t, 3);
+      const mixed = from.map((p, i) => ({
+        x: p.x + (to[i].x - p.x) * e,
+        y: p.y + (to[i].y - p.y) * e,
+      }));
+      setDrawPts(mixed);
+      if (t < 1) {
+        rafRef.current = requestAnimationFrame(tick);
+      } else {
+        fromRef.current = targetPts;
+        setDrawPts(targetPts);
+      }
+    };
+
+    rafRef.current = requestAnimationFrame(tick);
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
+  }, [targetPts]);
 
   return (
     <svg
-      viewBox={`0 0 ${w} ${h}`}
+      viewBox={`0 0 ${W} ${H}`}
       className="h-40 w-full overflow-visible"
       role="img"
-      aria-label="Equity curve"
+      aria-label={label}
     >
       <polyline
         fill="none"
         stroke="currentColor"
         strokeWidth="2"
-        points={pts}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        points={pointsToAttr(drawPts)}
         className="text-z-gold"
       />
     </svg>
@@ -46,6 +131,29 @@ export function ResultsSection({
 }) {
   const { results } = dict;
   const note = locale === "bg" ? demoBacktest.noteBg : demoBacktest.noteEn;
+  const [range, setRange] = useState<Range>("years");
+
+  const curve =
+    range === "years" ? demoBacktest.equityYearly : demoBacktest.equityMonthly;
+
+  const rows =
+    range === "years"
+      ? demoBacktest.yearly.map((r) => ({
+          key: String(r.year),
+          label: String(r.year),
+          start: r.start,
+          end: r.end,
+          profit: r.profit,
+          pct: r.pct,
+          partial: r.partial,
+        }))
+      : demoBacktest.monthly.map((r) => ({
+          ...r,
+          label: formatMonthLabel(r.key, locale),
+        }));
+
+  const periodCol =
+    range === "years" ? results.colYear : results.colMonth;
 
   return (
     <section id="results" className="scroll-mt-20 px-6 py-24 md:px-10 md:py-32">
@@ -67,9 +175,42 @@ export function ResultsSection({
           </span>
         </div>
 
-        <div className="mt-12 grid gap-10 border-t border-z-line pt-10 md:grid-cols-[1.2fr_0.8fr]">
+        <div
+          className="mt-10 inline-flex border border-z-line p-1"
+          role="tablist"
+          aria-label={results.rangeLabel}
+        >
+          {(
+            [
+              ["years", results.viewYears],
+              ["months", results.viewMonths],
+            ] as const
+          ).map(([id, label]) => (
+            <button
+              key={id}
+              type="button"
+              role="tab"
+              aria-selected={range === id}
+              onClick={() => setRange(id)}
+              className={
+                range === id
+                  ? "bg-z-gold px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-z-bg"
+                  : "px-4 py-2 text-xs uppercase tracking-[0.14em] text-z-muted transition hover:text-z-ink"
+              }
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+
+        <div className="mt-10 grid gap-10 border-t border-z-line pt-10 md:grid-cols-[1.2fr_0.8fr]">
           <div className="text-z-gold">
-            <EquitySparkline values={demoBacktest.equityCurve} />
+            <EquityChart
+              values={curve}
+              label={
+                range === "years" ? results.chartYears : results.chartMonths
+              }
+            />
             <p className="mt-4 text-sm text-z-muted">{note}</p>
           </div>
           <dl className="grid grid-cols-3 gap-6 self-center md:grid-cols-1 md:gap-8">
@@ -100,11 +241,11 @@ export function ResultsSection({
           </dl>
         </div>
 
-        <div className="mt-14 overflow-x-auto">
+        <div className="mt-14 max-h-[28rem] overflow-auto">
           <table className="w-full min-w-[36rem] text-left text-sm">
-            <thead>
+            <thead className="sticky top-0 bg-z-bg">
               <tr className="border-b border-z-line text-xs uppercase tracking-[0.14em] text-z-muted">
-                <th className="py-3 pr-4 font-medium">{results.colYear}</th>
+                <th className="py-3 pr-4 font-medium">{periodCol}</th>
                 <th className="py-3 pr-4 font-medium">{results.colStart}</th>
                 <th className="py-3 pr-4 font-medium">{results.colEnd}</th>
                 <th className="py-3 pr-4 font-medium">{results.colProfit}</th>
@@ -112,30 +253,30 @@ export function ResultsSection({
               </tr>
             </thead>
             <tbody>
-              {demoBacktest.yearly.map((row) => (
-                <tr key={row.year} className="border-b border-z-line/70">
-                  <td className="py-4 pr-4 text-z-ink">
-                    {row.year}
+              {rows.map((row) => (
+                <tr key={row.key} className="border-b border-z-line/70">
+                  <td className="py-3 pr-4 text-z-ink">
+                    {row.label}
                     {row.partial ? (
                       <span className="ml-2 text-xs text-z-muted">
                         ({results.partial})
                       </span>
                     ) : null}
                   </td>
-                  <td className="py-4 pr-4 text-z-muted">
+                  <td className="py-3 pr-4 text-z-muted">
                     {formatMoney(row.start, locale)}
                   </td>
-                  <td className="py-4 pr-4 text-z-muted">
+                  <td className="py-3 pr-4 text-z-muted">
                     {formatMoney(row.end, locale)}
                   </td>
                   <td
-                    className={`py-4 pr-4 ${row.profit >= 0 ? "text-z-ink" : "text-z-muted"}`}
+                    className={`py-3 pr-4 ${row.profit >= 0 ? "text-z-ink" : "text-z-muted"}`}
                   >
                     {formatMoney(row.profit, locale)}
                   </td>
                   <td
                     className={
-                      row.pct >= 0 ? "py-4 text-z-gold" : "py-4 text-z-muted"
+                      row.pct >= 0 ? "py-3 text-z-gold" : "py-3 text-z-muted"
                     }
                   >
                     {formatPct(row.pct, locale)}
