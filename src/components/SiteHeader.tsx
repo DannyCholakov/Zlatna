@@ -56,7 +56,7 @@ export function SiteHeader({
           : "fixed inset-x-0 top-0 z-50 border-b border-transparent bg-transparent transition-[background-color,border-color,backdrop-filter] duration-300"
       }
     >
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-4 md:px-10">
+      <div className="flex w-full items-center justify-between gap-4 px-6 py-4 md:px-10 lg:px-16">
         <Link href={`/${locale}`} className="shrink-0 text-z-ink">
           <Wordmark className="h-7 w-auto md:h-8" />
         </Link>
