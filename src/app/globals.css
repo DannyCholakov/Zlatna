@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+:root {
+  --z-bg: #0c0b0a;
+  --z-panel: #12110f;
+  --z-ink: #f2eee6;
+  --z-muted: #9a9388;
+  --z-gold: #c4a35a;
+  --z-gold-soft: #d4b56e;
+  --z-line: rgba(242, 238, 230, 0.12);
+}
+
+@theme inline {
+  --color-z-bg: var(--z-bg);
+  --color-z-panel: var(--z-panel);
+  --color-z-ink: var(--z-ink);
+  --color-z-muted: var(--z-muted);
+  --color-z-gold: var(--z-gold);
+  --color-z-gold-soft: var(--z-gold-soft);
+  --color-z-line: var(--z-line);
+  --font-sans: var(--font-body);
+  --font-display: var(--font-display);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--z-bg);
+  color: var(--z-ink);
+  font-family: var(--font-body), system-ui, sans-serif;
+}
+
+.font-display {
+  font-family: var(--font-display), Georgia, "Times New Roman", serif;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-rise {
+  animation: rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
