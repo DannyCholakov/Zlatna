@@ -269,6 +269,7 @@ const bg: Dictionary = {
     viewMonths: "Месеци",
     chartYears: "Капитал по години",
     chartMonths: "Капитал по месеци",
+    selectAll: "Всички",
   },
   community: {
     eyebrow: "Telegram",
