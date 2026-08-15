@@ -6,11 +6,25 @@ import type { Dictionary } from "@/i18n/dictionaries";
 import {
   demoBacktest,
   formatMoney,
-  formatMonthLabel,
   formatPct,
 } from "@/data/demo-backtest";
 
 type Range = "years" | "months";
+
+const MONTH_ABBR = [
+  "JAN",
+  "FEB",
+  "MAR",
+  "APR",
+  "MAY",
+  "JUN",
+  "JUL",
+  "AUG",
+  "SEP",
+  "OCT",
+  "NOV",
+  "DEC",
+] as const;
 
 const W = 640;
 const H = 160;
@@ -30,7 +44,8 @@ function resample(
   pts: { x: number; y: number }[],
   n: number,
 ): { x: number; y: number }[] {
-  if (pts.length === 0) return Array.from({ length: n }, () => ({ x: 0, y: H / 2 }));
+  if (pts.length === 0)
+    return Array.from({ length: n }, () => ({ x: 0, y: H / 2 }));
   if (pts.length === 1) {
     return Array.from({ length: n }, (_, i) => ({
       x: (i / Math.max(n - 1, 1)) * W,
@@ -49,7 +64,6 @@ function resample(
       y: pts[i0].y + (pts[i1].y - pts[i0].y) * u,
     });
   }
-  // Re-space x evenly for clean morph
   return out.map((p, i) => ({
     x: n === 1 ? W / 2 : (i / (n - 1)) * W,
     y: p.y,
@@ -122,6 +136,41 @@ function EquityChart({
   );
 }
 
+function Chip({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      className={
+        active
+          ? "bg-z-gold px-3 py-1.5 text-[0.7rem] font-semibold uppercase tracking-[0.12em] text-z-bg"
+          : "border border-z-line px-3 py-1.5 text-[0.7rem] uppercase tracking-[0.12em] text-z-muted transition hover:border-z-gold/40 hover:text-z-ink"
+      }
+    >
+      {children}
+    </button>
+  );
+}
+
+function toggleInSet(set: Set<number>, value: number): Set<number> {
+  const next = new Set(set);
+  if (next.has(value)) {
+    if (next.size > 1) next.delete(value);
+  } else {
+    next.add(value);
+  }
+  return next;
+}
+
 export function ResultsSection({
   locale,
   dict,
@@ -131,14 +180,59 @@ export function ResultsSection({
 }) {
   const { results } = dict;
   const note = locale === "bg" ? demoBacktest.noteBg : demoBacktest.noteEn;
+  const years = demoBacktest.yearly.map((y) => y.year);
+
   const [range, setRange] = useState<Range>("years");
+  const [selectedYears, setSelectedYears] = useState<Set<number>>(
+    () => new Set(years),
+  );
+  const [selectedMonths, setSelectedMonths] = useState<Set<number>>(
+    () => new Set([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]),
+  );
 
-  const curve =
-    range === "years" ? demoBacktest.equityYearly : demoBacktest.equityMonthly;
+  const activeYears = useMemo(() => {
+    const sorted = [...selectedYears].sort((a, b) => a - b);
+    return sorted.length ? sorted : years;
+  }, [selectedYears, years]);
 
-  const rows =
-    range === "years"
-      ? demoBacktest.yearly.map((r) => ({
+  const activeMonths = useMemo(() => {
+    const sorted = [...selectedMonths].sort((a, b) => a - b);
+    return sorted.length
+      ? sorted
+      : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+  }, [selectedMonths]);
+
+  const curve = useMemo(() => {
+    if (range === "years") {
+      const pts: number[] = [];
+      for (const y of demoBacktest.yearly) {
+        if (!activeYears.includes(y.year)) continue;
+        if (pts.length === 0) pts.push(y.start);
+        pts.push(y.end);
+      }
+      return pts.length ? pts : demoBacktest.equityYearly;
+    }
+
+    // Month-end equity for selected year(s) × month(s)
+    const pts: number[] = [];
+    let seeded = false;
+    for (const row of demoBacktest.monthly) {
+      const [ys, ms] = row.key.split("-").map(Number);
+      if (!activeYears.includes(ys) || !activeMonths.includes(ms)) continue;
+      if (!seeded) {
+        pts.push(row.start);
+        seeded = true;
+      }
+      pts.push(row.end);
+    }
+    return pts.length ? pts : demoBacktest.equityMonthly;
+  }, [range, activeYears, activeMonths]);
+
+  const rows = useMemo(() => {
+    if (range === "years") {
+      return demoBacktest.yearly
+        .filter((r) => activeYears.includes(r.year))
+        .map((r) => ({
           key: String(r.year),
           label: String(r.year),
           start: r.start,
@@ -146,14 +240,24 @@ export function ResultsSection({
           profit: r.profit,
           pct: r.pct,
           partial: r.partial,
-        }))
-      : demoBacktest.monthly.map((r) => ({
-          ...r,
-          label: formatMonthLabel(r.key, locale),
         }));
+    }
+    return demoBacktest.monthly
+      .filter((r) => {
+        const [ys, ms] = r.key.split("-").map(Number);
+        return activeYears.includes(ys) && activeMonths.includes(ms);
+      })
+      .map((r) => {
+        const [, ms] = r.key.split("-").map(Number);
+        const year = r.key.slice(0, 4);
+        return {
+          ...r,
+          label: `${MONTH_ABBR[ms - 1]} ${year}`,
+        };
+      });
+  }, [range, activeYears, activeMonths]);
 
-  const periodCol =
-    range === "years" ? results.colYear : results.colMonth;
+  const periodCol = range === "years" ? results.colYear : results.colMonth;
 
   return (
     <section id="results" className="scroll-mt-20 px-6 py-24 md:px-10 md:py-32">
@@ -175,32 +279,65 @@ export function ResultsSection({
           </span>
         </div>
 
-        <div
-          className="mt-10 inline-flex border border-z-line p-1"
-          role="tablist"
-          aria-label={results.rangeLabel}
-        >
-          {(
-            [
-              ["years", results.viewYears],
-              ["months", results.viewMonths],
-            ] as const
-          ).map(([id, label]) => (
-            <button
-              key={id}
-              type="button"
-              role="tab"
-              aria-selected={range === id}
-              onClick={() => setRange(id)}
-              className={
-                range === id
-                  ? "bg-z-gold px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-z-bg"
-                  : "px-4 py-2 text-xs uppercase tracking-[0.14em] text-z-muted transition hover:text-z-ink"
-              }
-            >
-              {label}
-            </button>
-          ))}
+        <div className="mt-10 flex flex-col items-center gap-5">
+          <div
+            className="inline-flex border border-z-line p-1"
+            role="tablist"
+            aria-label={results.rangeLabel}
+          >
+            {(
+              [
+                ["years", results.viewYears],
+                ["months", results.viewMonths],
+              ] as const
+            ).map(([id, label]) => (
+              <button
+                key={id}
+                type="button"
+                role="tab"
+                aria-selected={range === id}
+                onClick={() => setRange(id)}
+                className={
+                  range === id
+                    ? "bg-z-gold px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-z-bg"
+                    : "px-4 py-2 text-xs uppercase tracking-[0.14em] text-z-muted transition hover:text-z-ink"
+                }
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+
+          <div className="flex max-w-full flex-wrap justify-center gap-2">
+            {years.map((y) => (
+              <Chip
+                key={y}
+                active={selectedYears.has(y)}
+                onClick={() => setSelectedYears((s) => toggleInSet(s, y))}
+              >
+                {y}
+              </Chip>
+            ))}
+          </div>
+
+          {range === "months" ? (
+            <div className="flex max-w-full flex-wrap justify-center gap-2">
+              {MONTH_ABBR.map((abbr, i) => {
+                const m = i + 1;
+                return (
+                  <Chip
+                    key={abbr}
+                    active={selectedMonths.has(m)}
+                    onClick={() =>
+                      setSelectedMonths((s) => toggleInSet(s, m))
+                    }
+                  >
+                    {abbr}
+                  </Chip>
+                );
+              })}
+            </div>
+          ) : null}
         </div>
 
         <div className="mt-10 grid gap-10 border-t border-z-line pt-10 md:grid-cols-[1.2fr_0.8fr]">
