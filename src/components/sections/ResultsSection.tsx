@@ -494,9 +494,9 @@ export function ResultsSection({
             />
             <p className="mt-3 text-sm leading-relaxed text-z-muted">{note}</p>
           </div>
-          <dl className="grid grid-cols-3 gap-6 self-start border border-z-line bg-z-panel/50 p-6 lg:grid-cols-1 lg:gap-8">
+          <dl className="grid grid-cols-3 gap-6 self-start border border-z-gold/35 bg-gradient-to-br from-z-gold/25 via-z-gold/10 to-z-panel p-6 shadow-[inset_0_1px_0_rgba(242,238,230,0.08)] lg:grid-cols-1 lg:gap-8">
             <div>
-              <dt className="text-xs uppercase tracking-[0.16em] text-z-muted">
+              <dt className="text-xs uppercase tracking-[0.16em] text-z-gold">
                 {results.netLabel}
               </dt>
               <dd className="mt-2 font-display text-3xl text-z-ink">
@@ -504,7 +504,7 @@ export function ResultsSection({
               </dd>
             </div>
             <div>
-              <dt className="text-xs uppercase tracking-[0.16em] text-z-muted">
+              <dt className="text-xs uppercase tracking-[0.16em] text-z-gold">
                 {results.ddLabel}
               </dt>
               <dd className="mt-2 font-display text-3xl text-z-ink">
@@ -512,7 +512,7 @@ export function ResultsSection({
               </dd>
             </div>
             <div>
-              <dt className="text-xs uppercase tracking-[0.16em] text-z-muted">
+              <dt className="text-xs uppercase tracking-[0.16em] text-z-gold">
                 {results.wrLabel}
               </dt>
               <dd className="mt-2 font-display text-3xl text-z-ink">
