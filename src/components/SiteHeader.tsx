@@ -57,15 +57,15 @@ export function SiteHeader({
       }
     >
       <div className="flex w-full items-center justify-between gap-4 px-6 py-4 md:px-10 lg:px-16">
-        <Link href={`/${locale}`} className="shrink-0 text-z-ink">
-          <Wordmark className="h-7 w-auto md:h-8" />
+        <Link href={`/${locale}`} className="shrink-0">
+          <Wordmark className="text-[1.35rem] md:text-[1.5rem]" />
         </Link>
-        <nav className="hidden items-center gap-7 text-[0.8rem] uppercase tracking-[0.14em] text-z-muted lg:flex">
+        <nav className="hidden items-center gap-7 text-[0.75rem] uppercase tracking-[0.16em] text-z-muted lg:flex">
           {links.map((l) => (
             <a
               key={l.href}
               href={l.href}
-              className="transition-colors hover:text-z-ink"
+              className="transition-colors hover:text-z-gold"
             >
               {l.label}
             </a>
@@ -77,10 +77,10 @@ export function SiteHeader({
             href={telegramUrl}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-2 bg-z-gold px-3 py-2 text-[0.75rem] font-semibold uppercase tracking-[0.12em] text-z-bg transition hover:bg-z-gold-soft sm:px-4"
+            className="inline-flex items-center gap-2 rounded-full bg-z-gold px-3.5 py-2 text-[0.7rem] font-semibold uppercase tracking-[0.12em] text-z-bg transition hover:bg-z-gold-soft sm:px-4"
             aria-label={dict.nav.join}
           >
-            <TelegramIcon className="h-4 w-4 shrink-0" />
+            <TelegramIcon className="h-3.5 w-3.5 shrink-0" />
             <span className="hidden sm:inline">{dict.nav.join}</span>
           </a>
         </div>

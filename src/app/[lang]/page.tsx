@@ -1,4 +1,6 @@
 import { notFound } from "next/navigation";
+import { FeatureStrip } from "@/components/FeatureStrip";
+import { MarketTicker } from "@/components/MarketTicker";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { CommunitySection } from "@/components/sections/CommunitySection";
@@ -25,6 +27,8 @@ export default async function HomePage({
       <SiteHeader locale={lang} dict={dict} />
       <main className="flex-1">
         <HeroSection dict={dict} />
+        <MarketTicker />
+        <FeatureStrip dict={dict} />
         <WhyGoldSection dict={dict} />
         <MethodSection dict={dict} />
         <ResultsSection locale={lang} dict={dict} />

@@ -1,6 +1,10 @@
-# Zlatna
+# TradeVision
 
-Premium bilingual (English / Bulgarian) marketing site for an XAUUSD gold community. Built with Next.js for Vercel.
+Premium bilingual (English / Bulgarian) marketing site for an automated trading community. Built with Next.js for Vercel.
+
+## Brand
+
+**TradeVision** — logo mark is an eye aperture + rising chart (`public/logo.svg` and `src/components/Wordmark.tsx`).
 
 ## Local
 
@@ -13,28 +17,14 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) — redirects to `/en`. Switch with `/bg`.
 
-Set `NEXT_PUBLIC_TELEGRAM_URL` in `.env` to your real invite link.
+Set `NEXT_PUBLIC_TELEGRAM_URL` in `.env` to your invite link when ready.
 
-## Demo backtest data
+## Demo data
 
-Replace numbers in [`src/data/demo-backtest.ts`](src/data/demo-backtest.ts). The Results section is labeled **DEMO**.
+Replace numbers in [`src/data/demo-backtest.ts`](src/data/demo-backtest.ts). Results stay labeled **DEMO**.
 
-## GitHub + Vercel
+## Deploy
 
-This folder is its **own** git repository (nested under TradingBot, ignored by the parent).
+Repo: https://github.com/DannyCholakov/Zlatna (rename on GitHub to TradeVision when you want).
 
-```powershell
-cd C:\Users\danie\Desktop\TradingBot\website
-git push
-```
-
-Then in [Vercel](https://vercel.com):
-
-1. Import the **Zlatna** GitHub repo  
-2. Framework: Next.js (auto)  
-3. Root directory: `.` (repo root is the site)  
-4. Env: `NEXT_PUBLIC_TELEGRAM_URL`
-
-## Brand
-
-Working name **Zlatna** — wordmark only for now; swap logo assets later without redesigning layout.
+Vercel env: `NEXT_PUBLIC_TELEGRAM_URL`

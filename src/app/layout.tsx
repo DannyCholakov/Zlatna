@@ -15,8 +15,11 @@ const body = Source_Sans_3({
 });
 
 export const metadata: Metadata = {
-  title: "Zlatna",
-  description: "Gold community for XAUUSD — bilingual EN / BG",
+  title: "TradeVision",
+  description: "Automated trading community — bilingual EN / BG",
+  icons: {
+    icon: "/logo.svg",
+  },
 };
 
 export default function RootLayout({

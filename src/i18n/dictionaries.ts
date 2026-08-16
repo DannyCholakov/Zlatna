@@ -17,6 +17,12 @@ export type Dictionary = {
     ctaTelegram: string;
     ctaResults: string;
     marketsLabel: string;
+    chartLabel: string;
+    chartPrice: string;
+    chartChange: string;
+  };
+  features: {
+    items: { title: string; body: string }[];
   };
   whyGold: {
     eyebrow: string;
@@ -73,7 +79,7 @@ export type Dictionary = {
 
 const en: Dictionary = {
   meta: {
-    title: "Zlatna — automated trading community",
+    title: "TradeVision — automated trading community",
     description:
       "Automated consistency instead of impulse decisions. Try one month. English and Bulgarian.",
   },
@@ -86,13 +92,36 @@ const en: Dictionary = {
     join: "Telegram",
   },
   hero: {
-    brand: "Zlatna",
+    brand: "TradeVision",
     line: "How much money have you lost so far?",
     support:
       "Don't tell us. The market is a psychological game built to win from traders — not to make them rich easily. Leave that to us. We work automatically, on consistency — without endless analysis, indicators, and spur-of-the-moment decisions.",
     ctaTelegram: "Try one month",
     ctaResults: "See how we work",
     marketsLabel: "Markets we cover",
+    chartLabel: "XAUUSD (GOLD)",
+    chartPrice: "2,387.45 USD",
+    chartChange: "+18.75 (+0.79%)",
+  },
+  features: {
+    items: [
+      {
+        title: "4 years of data",
+        body: "A multi-year track behind the rules — not a one-week backtest story.",
+      },
+      {
+        title: "Clear method",
+        body: "Automation instead of impulse. Same rules, no on-the-spot exceptions.",
+      },
+      {
+        title: "Active community",
+        body: "Telegram in English and Bulgarian — learn with people who take it seriously.",
+      },
+      {
+        title: "Real results",
+        body: "Transparent statistics you can review by year and by month.",
+      },
+    ],
   },
   whyGold: {
     eyebrow: "Allocation",
@@ -186,14 +215,14 @@ const en: Dictionary = {
   },
   footer: {
     disclaimer:
-      "Trading involves substantial risk of loss. Past or simulated performance is not a guarantee of future results. Zlatna provides education and community context — not personalized investment advice.",
-    rights: "Zlatna — working name",
+      "Trading involves substantial risk of loss. Past or simulated performance is not a guarantee of future results. TradeVision provides education and community context — not personalized investment advice.",
+    rights: "TradeVision — working name",
   },
 };
 
 const bg: Dictionary = {
   meta: {
-    title: "Zlatna — автоматизирана трейдинг общност",
+    title: "TradeVision — автоматизирана трейдинг общност",
     description:
       "Автоматизация и постоянство вместо импулсивни решения. Пробвай един месец. Български и английски.",
   },
@@ -206,13 +235,36 @@ const bg: Dictionary = {
     join: "Telegram",
   },
   hero: {
-    brand: "Zlatna",
+    brand: "TradeVision",
     line: "Колко пари си изгубил досега?",
     support:
       "Не ни казвай. Пазарът е психологическа игра, изградена да печели от трейдърите — не да ги прави богати лесно. Оставете това на нас. Ние работим автоматизирано, на принципа на постоянството, без безкрайни анализи, индикатори и решения на момента.",
     ctaTelegram: "Пробвай един месец",
     ctaResults: "Разбери как работим",
     marketsLabel: "Пазари, които покриваме",
+    chartLabel: "XAUUSD (ЗЛАТО)",
+    chartPrice: "2,387.45 USD",
+    chartChange: "+18.75 (+0.79%)",
+  },
+  features: {
+    items: [
+      {
+        title: "4 години данни",
+        body: "Многогодишен track зад правилата — не история от една седмица бектест.",
+      },
+      {
+        title: "Ясен метод",
+        body: "Автоматизация вместо импулс. Едни и същи правила, без изключения на момента.",
+      },
+      {
+        title: "Активна общност",
+        body: "Telegram на български и английски — с хора, които го приемат сериозно.",
+      },
+      {
+        title: "Реални резултати",
+        body: "Прозрачна статистика, която можеш да прегледаш по години и месеци.",
+      },
+    ],
   },
   whyGold: {
     eyebrow: "Алокация",
@@ -306,8 +358,8 @@ const bg: Dictionary = {
   },
   footer: {
     disclaimer:
-      "Търговията носи съществен риск от загуба. Минали или симулирани резултати не гарантират бъдещи. Zlatna предоставя образование и общностен контекст — не персонализиран инвестиционен съвет.",
-    rights: "Zlatna — работно име",
+      "Търговията носи съществен риск от загуба. Минали или симулирани резултати не гарантират бъдещи. TradeVision предоставя образование и общностен контекст — не персонализиран инвестиционен съвет.",
+    rights: "TradeVision — работно име",
   },
 };
 
