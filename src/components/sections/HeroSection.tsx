@@ -1,28 +1,31 @@
+"use client";
+
+import { useMemo, useState } from "react";
 import type { Dictionary } from "@/i18n/dictionaries";
+import {
+  DEFAULT_MARKET_ID,
+  MARKETS,
+  type MarketCandle,
+  type MarketInstrument,
+} from "@/data/markets";
 
 const telegramUrl =
   process.env.NEXT_PUBLIC_TELEGRAM_URL ?? "https://t.me/";
 
-function HeroCandleChart() {
-  const candles = [
-    { x: 28, o: 118, c: 98, h: 90, l: 125 },
-    { x: 52, o: 100, c: 88, h: 82, l: 108 },
-    { x: 76, o: 90, c: 105, h: 80, l: 112 },
-    { x: 100, o: 104, c: 78, h: 72, l: 110 },
-    { x: 124, o: 80, c: 62, h: 55, l: 88 },
-    { x: 148, o: 65, c: 48, h: 42, l: 72 },
-    { x: 172, o: 52, c: 70, h: 45, l: 78 },
-    { x: 196, o: 68, c: 40, h: 34, l: 75 },
-    { x: 220, o: 44, c: 28, h: 22, l: 52 },
-    { x: 244, o: 32, c: 18, h: 12, l: 40 },
-  ];
-
+function HeroCandleChart({
+  candles,
+  chartId,
+}: {
+  candles: readonly MarketCandle[];
+  chartId: string;
+}) {
+  const gradId = `heroBarGold-${chartId}`;
   return (
     <svg viewBox="0 0 280 150" className="h-36 w-full" aria-hidden>
       <defs>
-        <linearGradient id="heroBarGold" x1="0" y1="0" x2="0" y2="1">
+        <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="#f0d78c" />
-          <stop offset="100%" stopColor="#c4a35a" />
+          <stop offset="100%" stopColor="#d4af37" />
         </linearGradient>
       </defs>
       {candles.map((c, i) => {
@@ -36,7 +39,7 @@ function HeroCandleChart() {
               x2={c.x}
               y1={c.h}
               y2={c.l}
-              stroke="url(#heroBarGold)"
+              stroke={`url(#${gradId})`}
               strokeWidth="1.5"
             />
             <rect
@@ -45,8 +48,8 @@ function HeroCandleChart() {
               width="12"
               height={bodyH}
               rx="1"
-              fill={up ? "url(#heroBarGold)" : "#1a1814"}
-              stroke="url(#heroBarGold)"
+              fill={up ? `url(#${gradId})` : "#141210"}
+              stroke={`url(#${gradId})`}
               strokeWidth="1"
             />
           </g>
@@ -56,20 +59,119 @@ function HeroCandleChart() {
   );
 }
 
-export function HeroSection({ dict }: { dict: Dictionary }) {
+function MiniSpark({
+  values,
+  up,
+  active,
+}: {
+  values: readonly number[];
+  up: boolean;
+  active: boolean;
+}) {
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  const span = max - min || 1;
+  const w = 88;
+  const h = 32;
+  const pts = values
+    .map((v, i) => {
+      const x = (i / (values.length - 1)) * w;
+      const y = h - ((v - min) / span) * (h - 6) - 3;
+      return `${x},${y}`;
+    })
+    .join(" ");
+
   return (
-    <section className="relative min-h-[100svh] overflow-hidden">
+    <svg viewBox={`0 0 ${w} ${h}`} className="h-8 w-[5.5rem]" aria-hidden>
+      <polyline
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.75"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        points={pts}
+        className={
+          active
+            ? "text-z-gold"
+            : up
+              ? "text-emerald-400/90"
+              : "text-rose-400/90"
+        }
+      />
+    </svg>
+  );
+}
+
+function MarketCard({
+  market,
+  selected,
+  onSelect,
+}: {
+  market: MarketInstrument;
+  selected: boolean;
+  onSelect: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onSelect}
+      aria-pressed={selected}
+      className={
+        selected
+          ? "group min-w-[11rem] shrink-0 rounded-2xl border border-z-gold bg-gradient-to-b from-z-gold/20 to-z-panel/90 px-4 py-3.5 text-left shadow-[0_0_0_1px_rgba(212,175,55,0.25),0_12px_32px_rgba(0,0,0,0.35)] transition"
+          : "group min-w-[11rem] shrink-0 rounded-2xl border border-z-gold/15 bg-z-bg/55 px-4 py-3.5 text-left backdrop-blur-md transition hover:border-z-gold/40 hover:bg-z-panel/80"
+      }
+    >
+      <div className="flex items-center justify-between gap-2">
+        <p className="font-display text-sm tracking-wide text-z-ink">
+          {market.symbol}
+        </p>
+        <span
+          className={`text-[0.7rem] font-semibold tracking-wide ${
+            market.up ? "text-emerald-400" : "text-rose-400"
+          }`}
+        >
+          {market.changePct}
+        </span>
+      </div>
+      <p className="mt-0.5 text-[0.65rem] uppercase tracking-[0.14em] text-z-muted">
+        {market.name}
+      </p>
+      <p className="mt-2 font-display text-lg leading-none text-z-ink/95">
+        {market.price}
+      </p>
+      <div className="mt-3 flex items-end justify-between gap-2">
+        <MiniSpark values={market.spark} up={market.up} active={selected} />
+        <span
+          className={`mb-0.5 h-1.5 w-1.5 rounded-full ${
+            selected ? "bg-z-gold" : "bg-z-muted/40"
+          }`}
+        />
+      </div>
+    </button>
+  );
+}
+
+export function HeroSection({ dict }: { dict: Dictionary }) {
+  const [selectedId, setSelectedId] = useState(DEFAULT_MARKET_ID);
+  const selected = useMemo(
+    () => MARKETS.find((m) => m.id === selectedId) ?? MARKETS[0],
+    [selectedId],
+  );
+
+  return (
+    <section className="relative flex min-h-[100svh] flex-col overflow-hidden">
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{
           backgroundImage:
-            "linear-gradient(105deg, rgba(10,9,8,0.94) 0%, rgba(10,9,8,0.7) 45%, rgba(10,9,8,0.45) 100%), url('/hero-gold.jpg')",
+            "linear-gradient(105deg, rgba(10,9,8,0.94) 0%, rgba(10,9,8,0.72) 45%, rgba(10,9,8,0.5) 100%), url('/hero-gold.jpg')",
         }}
       />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_75%_35%,rgba(196,163,90,0.2),transparent_55%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_75%_30%,rgba(212,175,55,0.18),transparent_55%)]" />
 
-      <div className="relative mx-auto flex min-h-[100svh] w-full max-w-7xl flex-col justify-center gap-12 px-6 pb-16 pt-28 md:px-10 lg:flex-row lg:items-end lg:justify-between lg:px-16 lg:pb-24 lg:pt-32">
-        <div className="max-w-xl lg:pb-4">
+      <div className="relative mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center gap-10 px-6 pb-8 pt-28 md:px-10 lg:flex-row lg:items-end lg:justify-between lg:gap-12 lg:px-16 lg:pb-10 lg:pt-32">
+        <div className="max-w-xl lg:pb-2">
           <p
             className="animate-rise font-display text-5xl leading-none tracking-[0.04em] text-z-gold md:text-7xl"
             style={{ animationDelay: "0ms" }}
@@ -113,27 +215,55 @@ export function HeroSection({ dict }: { dict: Dictionary }) {
           className="animate-rise w-full max-w-sm shrink-0 self-center lg:self-end"
           style={{ animationDelay: "180ms" }}
         >
-          <div className="rounded-2xl border border-z-gold/35 bg-z-panel/70 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.45)] backdrop-blur-md">
+          <div
+            key={selected.id}
+            className="rounded-2xl border border-z-gold/40 bg-z-panel/75 p-5 shadow-[0_20px_60px_rgba(0,0,0,0.45)] backdrop-blur-md transition-opacity duration-300"
+          >
             <div className="flex items-start justify-between gap-3">
               <div>
                 <p className="text-xs uppercase tracking-[0.16em] text-z-muted">
-                  {dict.hero.chartLabel}
+                  {selected.symbol} ({selected.name})
                 </p>
-                <p className="mt-2 font-display text-2xl text-z-ink">
-                  {dict.hero.chartPrice}
+                <p className="mt-2 font-display text-2xl text-z-ink md:text-3xl">
+                  {selected.price}{" "}
+                  <span className="text-base text-z-muted">USD</span>
                 </p>
-                <p className="mt-1 text-sm font-medium text-emerald-400">
-                  {dict.hero.chartChange}
+                <p
+                  className={`mt-1 text-sm font-medium ${
+                    selected.up ? "text-emerald-400" : "text-rose-400"
+                  }`}
+                >
+                  {selected.changeAbs} ({selected.changePct})
                 </p>
               </div>
-              <span className="rounded-full border border-z-gold/30 px-2.5 py-1 text-[0.65rem] uppercase tracking-wider text-z-gold">
+              <span className="rounded-full border border-z-gold/35 bg-z-gold/10 px-2.5 py-1 text-[0.65rem] uppercase tracking-wider text-z-gold">
                 Live
               </span>
             </div>
             <div className="mt-4 border-t border-z-line pt-3">
-              <HeroCandleChart />
+              <HeroCandleChart candles={selected.candles} chartId={selected.id} />
             </div>
           </div>
+        </div>
+      </div>
+
+      <div className="relative z-10 border-t border-z-gold/15 bg-black/35 backdrop-blur-md">
+        <p className="px-6 pt-4 text-[0.65rem] uppercase tracking-[0.2em] text-z-gold/80 md:px-10 lg:px-16">
+          {dict.hero.marketsLabel}
+        </p>
+        <div
+          className="flex gap-3 overflow-x-auto px-6 py-4 pb-6 md:px-10 lg:px-16"
+          role="listbox"
+          aria-label={dict.hero.marketsLabel}
+        >
+          {MARKETS.map((m) => (
+            <MarketCard
+              key={m.id}
+              market={m}
+              selected={m.id === selected.id}
+              onSelect={() => setSelectedId(m.id)}
+            />
+          ))}
         </div>
       </div>
     </section>
