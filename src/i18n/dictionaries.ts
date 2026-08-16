@@ -65,13 +65,6 @@ export type Dictionary = {
     lead: string;
     points: { title: string; body: string }[];
   };
-  promoAd: {
-    label: string;
-    title: string;
-    body: string;
-    cta: string;
-    dismiss: string;
-  };
   footer: {
     disclaimer: string;
     rights: string;
@@ -190,13 +183,6 @@ const en: Dictionary = {
         body: "Tracking links come next. For now, share Telegram and the track record.",
       },
     ],
-  },
-  promoAd: {
-    label: "Ad",
-    title: "ZLATNA",
-    body: "Join our Telegram group — automated signals, method notes, and community in EN & BG. Opening soon.",
-    cta: "JOIN GROUP",
-    dismiss: "Close ad",
   },
   footer: {
     disclaimer:
@@ -317,13 +303,6 @@ const bg: Dictionary = {
         body: "Tracking линковете идват следващи. Засега споделяй Telegram и track record-а.",
       },
     ],
-  },
-  promoAd: {
-    label: "Ad",
-    title: "ZLATNA",
-    body: "Влез в нашата Telegram група — автоматизирани сигнали, бележки по метода и общност на BG и EN. Отворяме скоро.",
-    cta: "КЪМ ГРУПАТА",
-    dismiss: "Затвори рекламата",
   },
   footer: {
     disclaimer:
