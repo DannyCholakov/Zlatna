@@ -194,8 +194,8 @@ const en: Dictionary = {
   promoAd: {
     label: "Ad",
     title: "ZLATNA",
-    body: "Try one month. Copy the automated bot — consistency instead of impulse decisions.",
-    cta: "VIEW BOT",
+    body: "Join our Telegram group — automated signals, method notes, and community in EN & BG. Opening soon.",
+    cta: "JOIN GROUP",
     dismiss: "Close ad",
   },
   footer: {
@@ -321,8 +321,8 @@ const bg: Dictionary = {
   promoAd: {
     label: "Ad",
     title: "ZLATNA",
-    body: "Пробвай един месец. Копирай автоматизирания бот — постоянство вместо импулсивни решения.",
-    cta: "ВИЖ БОТА",
+    body: "Влез в нашата Telegram група — автоматизирани сигнали, бележки по метода и общност на BG и EN. Отворяме скоро.",
+    cta: "КЪМ ГРУПАТА",
     dismiss: "Затвори рекламата",
   },
   footer: {
