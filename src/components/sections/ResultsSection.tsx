@@ -522,42 +522,44 @@ export function ResultsSection({
           </dl>
         </div>
 
-        <div className="mt-14 max-h-[28rem] overflow-auto">
-          <table className="w-full min-w-[36rem] text-left text-sm">
+        <div className="mt-14 max-h-[28rem] overflow-y-auto overflow-x-hidden">
+          <table className="w-full table-fixed text-left text-xs sm:text-sm">
             <thead className="sticky top-0 bg-z-bg">
-              <tr className="border-b border-z-line text-xs uppercase tracking-[0.14em] text-z-muted">
-                <th className="py-3 pr-4 font-medium">{periodCol}</th>
-                <th className="py-3 pr-4 font-medium">{results.colStart}</th>
-                <th className="py-3 pr-4 font-medium">{results.colEnd}</th>
-                <th className="py-3 pr-4 font-medium">{results.colProfit}</th>
-                <th className="py-3 font-medium">{results.colPct}</th>
+              <tr className="border-b border-z-line text-[0.65rem] uppercase tracking-[0.12em] text-z-muted sm:text-xs">
+                <th className="w-[22%] py-3 pr-2 font-medium sm:pr-4">{periodCol}</th>
+                <th className="w-[20%] py-3 pr-2 font-medium sm:pr-4">{results.colStart}</th>
+                <th className="w-[20%] py-3 pr-2 font-medium sm:pr-4">{results.colEnd}</th>
+                <th className="w-[22%] py-3 pr-2 font-medium sm:pr-4">{results.colProfit}</th>
+                <th className="w-[16%] py-3 font-medium">{results.colPct}</th>
               </tr>
             </thead>
             <tbody>
               {rows.map((row) => (
                 <tr key={row.key} className="border-b border-z-line/70">
-                  <td className="py-3 pr-4 text-z-ink">
+                  <td className="truncate py-3 pr-2 text-z-ink sm:pr-4">
                     {row.label}
                     {row.partial ? (
-                      <span className="ml-2 text-xs text-z-muted">
+                      <span className="ml-1 text-[0.65rem] text-z-muted sm:ml-2">
                         ({results.partial})
                       </span>
                     ) : null}
                   </td>
-                  <td className="py-3 pr-4 text-z-muted">
+                  <td className="truncate py-3 pr-2 text-z-muted sm:pr-4">
                     {formatMoney(row.start, locale)}
                   </td>
-                  <td className="py-3 pr-4 text-z-muted">
+                  <td className="truncate py-3 pr-2 text-z-muted sm:pr-4">
                     {formatMoney(row.end, locale)}
                   </td>
                   <td
-                    className={`py-3 pr-4 ${row.profit >= 0 ? "text-z-ink" : "text-z-muted"}`}
+                    className={`truncate py-3 pr-2 sm:pr-4 ${row.profit >= 0 ? "text-z-ink" : "text-z-muted"}`}
                   >
                     {formatMoney(row.profit, locale)}
                   </td>
                   <td
                     className={
-                      row.pct >= 0 ? "py-3 text-z-gold" : "py-3 text-z-muted"
+                      row.pct >= 0
+                        ? "truncate py-3 text-z-gold"
+                        : "truncate py-3 text-z-muted"
                     }
                   >
                     {formatPct(row.pct, locale)}

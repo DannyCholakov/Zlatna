@@ -118,8 +118,8 @@ function MarketCard({
       aria-pressed={selected}
       className={
         selected
-          ? "group min-w-[11rem] shrink-0 rounded-2xl border border-z-gold bg-gradient-to-b from-z-gold/20 to-z-panel/90 px-4 py-3.5 text-left shadow-[0_0_0_1px_rgba(212,175,55,0.25),0_12px_32px_rgba(0,0,0,0.35)] transition"
-          : "group min-w-[11rem] shrink-0 rounded-2xl border border-z-gold/15 bg-z-bg/55 px-4 py-3.5 text-left backdrop-blur-md transition hover:border-z-gold/40 hover:bg-z-panel/80"
+          ? "group w-full rounded-2xl border border-z-gold bg-gradient-to-b from-z-gold/20 to-z-panel/90 px-3.5 py-3 text-left shadow-[0_0_0_1px_rgba(212,175,55,0.25),0_12px_32px_rgba(0,0,0,0.35)] transition"
+          : "group w-full rounded-2xl border border-z-gold/15 bg-z-bg/55 px-3.5 py-3 text-left backdrop-blur-md transition hover:border-z-gold/40 hover:bg-z-panel/80"
       }
     >
       <div className="flex items-center justify-between gap-2">
@@ -127,26 +127,21 @@ function MarketCard({
           {market.symbol}
         </p>
         <span
-          className={`text-[0.7rem] font-semibold tracking-wide ${
+          className={`text-[0.65rem] font-semibold tracking-wide ${
             market.up ? "text-emerald-400" : "text-rose-400"
           }`}
         >
           {market.changePct}
         </span>
       </div>
-      <p className="mt-0.5 text-[0.65rem] uppercase tracking-[0.14em] text-z-muted">
+      <p className="mt-0.5 text-[0.6rem] uppercase tracking-[0.14em] text-z-muted">
         {market.name}
       </p>
-      <p className="mt-2 font-display text-lg leading-none text-z-ink/95">
-        {market.price}
-      </p>
-      <div className="mt-3 flex items-end justify-between gap-2">
+      <div className="mt-2 flex items-end justify-between gap-2">
+        <p className="font-display text-base leading-none text-z-ink/95 sm:text-lg">
+          {market.price}
+        </p>
         <MiniSpark values={market.spark} up={market.up} active={selected} />
-        <span
-          className={`mb-0.5 h-1.5 w-1.5 rounded-full ${
-            selected ? "bg-z-gold" : "bg-z-muted/40"
-          }`}
-        />
       </div>
     </button>
   );
@@ -248,22 +243,24 @@ export function HeroSection({ dict }: { dict: Dictionary }) {
       </div>
 
       <div className="relative z-10 border-t border-z-gold/15 bg-black/35 backdrop-blur-md">
-        <p className="px-6 pt-4 text-[0.65rem] uppercase tracking-[0.2em] text-z-gold/80 md:px-10 lg:px-16">
-          {dict.hero.marketsLabel}
-        </p>
-        <div
-          className="flex gap-3 overflow-x-auto px-6 py-4 pb-6 md:px-10 lg:px-16"
-          role="listbox"
-          aria-label={dict.hero.marketsLabel}
-        >
-          {MARKETS.map((m) => (
-            <MarketCard
-              key={m.id}
-              market={m}
-              selected={m.id === selected.id}
-              onSelect={() => setSelectedId(m.id)}
-            />
-          ))}
+        <div className="mx-auto max-w-7xl px-6 py-4 md:px-10 lg:px-16">
+          <p className="text-[0.65rem] uppercase tracking-[0.2em] text-z-gold/80">
+            {dict.hero.marketsLabel}
+          </p>
+          <div
+            className="mt-3 grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7"
+            role="listbox"
+            aria-label={dict.hero.marketsLabel}
+          >
+            {MARKETS.map((m) => (
+              <MarketCard
+                key={m.id}
+                market={m}
+                selected={m.id === selected.id}
+                onSelect={() => setSelectedId(m.id)}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>
