@@ -16,6 +16,7 @@ export type Dictionary = {
     support: string;
     ctaTelegram: string;
     ctaResults: string;
+    marketsLabel: string;
   };
   whyGold: {
     eyebrow: string;
@@ -64,6 +65,13 @@ export type Dictionary = {
     lead: string;
     points: { title: string; body: string }[];
   };
+  promoAd: {
+    label: string;
+    title: string;
+    body: string;
+    cta: string;
+    dismiss: string;
+  };
   footer: {
     disclaimer: string;
     rights: string;
@@ -72,9 +80,9 @@ export type Dictionary = {
 
 const en: Dictionary = {
   meta: {
-    title: "Zlatna — Gold community for XAUUSD",
+    title: "Zlatna — automated trading community",
     description:
-      "Follow a gold bot with four years of winning backing data. Join the Zlatna Telegram community in English and Bulgarian.",
+      "Automated consistency instead of impulse decisions. Try one month. English and Bulgarian.",
   },
   nav: {
     whyGold: "Why gold",
@@ -86,54 +94,55 @@ const en: Dictionary = {
   },
   hero: {
     brand: "Zlatna",
-    line: "Four years of backing data. Every year in profit.",
+    line: "How much money have you lost so far?",
     support:
-      "Our XAUUSD bot is built on a verified multi-year track — green years only. Join Telegram to follow the same account path we use.",
-    ctaTelegram: "Join the community",
-    ctaResults: "See the 4-year track",
+      "Don't tell us. The market is a psychological game built to win from traders — not to make them rich easily. Leave that to us. We work automatically, on consistency — without endless analysis, indicators, and spur-of-the-moment decisions.",
+    ctaTelegram: "Try one month",
+    ctaResults: "See how we work",
+    marketsLabel: "Markets we cover",
   },
   whyGold: {
     eyebrow: "Allocation",
-    title: "Why gold still earns a place",
-    lead: "XAUUSD is not a lottery ticket. Used well, gold can steady a portfolio when currencies and equities wobble.",
+    title: "Gold’s place in a portfolio",
+    lead: "XAUUSD is not gambling. Used wisely, gold can stabilize a portfolio when currencies and equities move unevenly.",
     points: [
       {
-        title: "Hard asset, global bid",
-        body: "Central banks and long-horizon investors still hold gold as ballast when confidence in paper assets thins.",
+        title: "Hard asset with global demand",
+        body: "Central banks and long-horizon investors traditionally hold gold as protection in uncertain periods.",
       },
       {
-        title: "Liquid around the clock",
-        body: "Gold trades nearly 24 hours. You can express a view without waiting for a single equity open.",
+        title: "Liquidity almost around the clock",
+        body: "Gold trades through most of the day, so you stay flexible without depending on a single exchange open.",
       },
       {
-        title: "Different drivers",
-        body: "Rates, dollar strength, and risk appetite move gold on their own clock — useful diversification, not magic.",
+        title: "Its own dynamics",
+        body: "Rates, the dollar, and risk appetite move gold on their own rhythm — real diversification for a portfolio.",
       },
     ],
   },
   method: {
     eyebrow: "How we work",
-    title: "A bot you can follow",
-    lead: "Four years of history behind the rules. Risk scales with capital, sessions are filtered, and the yearly scorecard stays green.",
+    title: "Automation instead of decisions",
+    lead: "Manual decisions on the market carry error risk — and over time that shows in results. So we follow a predefined, tested logic — without you analyzing the market or deciding in real time.",
     steps: [
       {
-        title: "Risk first",
-        body: "Position size scales with capital. A fixed percent of equity per idea, with a hard margin ceiling.",
+        title: "No impulsive decisions",
+        body: "The strategy follows the same rules regardless of the situation. No emotions, no on-the-spot exceptions.",
       },
       {
-        title: "Session awareness",
-        body: "Asia, London, and New York behave differently. We map when the edge is worth taking — and when to stand aside.",
+        title: "No need to analyze",
+        body: "You do not have to watch charts, indicators, or news. The logic is set in advance and runs automatically.",
       },
       {
-        title: "Always on the winning side of the year",
-        body: "Across four calendar years of backing data, every year closed in profit. That is the bar we show before you join under us.",
+        title: "Consistency over time",
+        body: "The strategy works whether you are at the screen or not. Results build gradually while you focus on other things.",
       },
     ],
   },
   results: {
-    eyebrow: "4-year track",
-    title: "Every year profitable",
-    lead: "Four full years of backing data. Switch between yearly and monthly views — demo numbers until your real series is ready.",
+    eyebrow: "Statistics",
+    title: "The results speak for themselves",
+    lead: "Check for yourself — one month is enough to decide if the approach works for you. Below is the statistics behind the strategy, with yearly and monthly views (demo values until live data is synced).",
     demoBadge: "DEMO · 4Y",
     colYear: "Year",
     colMonth: "Month",
@@ -155,9 +164,9 @@ const en: Dictionary = {
   community: {
     eyebrow: "Telegram",
     title: "Follow the account that follows the bot",
-    lead: "We run the bot on our account. You connect below us, learn the method, and see the same winning track we publish.",
+    lead: "We run the bot on our account. You connect below us, learn the method, and see the same track we publish.",
     points: [
-      "Four years of green yearly results as the reference",
+      "One month is enough to judge the approach",
       "Method notes in Bulgarian and English",
       "Partner path: invite others under your link when the program opens",
     ],
@@ -166,7 +175,7 @@ const en: Dictionary = {
   partner: {
     eyebrow: "Grow with us",
     title: "Connect under a track that keeps winning",
-    lead: "When you join, you sit under our structure. When you invite others, they sit under yours — same bot story, same four-year backing.",
+    lead: "When you join, you sit under our structure. When you invite others, they sit under yours — same automation story.",
     points: [
       {
         title: "Same bot, same rules",
@@ -174,7 +183,7 @@ const en: Dictionary = {
       },
       {
         title: "Results first",
-        body: "We lead with the four-year winning years table so people know why joining is worth their time.",
+        body: "We lead with transparent statistics so people know why joining is worth their time.",
       },
       {
         title: "Affiliate when ready",
@@ -182,18 +191,25 @@ const en: Dictionary = {
       },
     ],
   },
+  promoAd: {
+    label: "Ad",
+    title: "ZLATNA",
+    body: "Try one month. Copy the automated bot — consistency instead of impulse decisions.",
+    cta: "VIEW BOT",
+    dismiss: "Close ad",
+  },
   footer: {
     disclaimer:
-      "Trading gold involves substantial risk of loss. Past or simulated performance is not a guarantee of future results. Zlatna provides education and community context — not personalized investment advice.",
+      "Trading involves substantial risk of loss. Past or simulated performance is not a guarantee of future results. Zlatna provides education and community context — not personalized investment advice.",
     rights: "Zlatna — working name",
   },
 };
 
 const bg: Dictionary = {
   meta: {
-    title: "Zlatna — общност около златото и XAUUSD",
+    title: "Zlatna — автоматизирана трейдинг общност",
     description:
-      "Следвайте бот за злато с четири години печеливши backing данни. Общност Zlatna в Telegram на български и английски.",
+      "Автоматизация и постоянство вместо импулсивни решения. Пробвай един месец. Български и английски.",
   },
   nav: {
     whyGold: "Защо злато",
@@ -205,54 +221,55 @@ const bg: Dictionary = {
   },
   hero: {
     brand: "Zlatna",
-    line: "Четири години backing данни. Всяка година на плюс.",
+    line: "Колко пари си изгубил досега?",
     support:
-      "Нашият XAUUSD бот стои върху проверени многогодишни резултати — само зелени години. Влез в Telegram и следвай същия път на акаунта, който ползваме ние.",
-    ctaTelegram: "Влез в общността",
-    ctaResults: "Виж 4-годишния track",
+      "Не ни казвай. Пазарът е психологическа игра, изградена да печели от трейдърите — не да ги прави богати лесно. Оставете това на нас. Ние работим автоматизирано, на принципа на постоянството, без безкрайни анализи, индикатори и решения на момента.",
+    ctaTelegram: "Пробвай един месец",
+    ctaResults: "Разбери как работим",
+    marketsLabel: "Пазари, които покриваме",
   },
   whyGold: {
     eyebrow: "Алокация",
-    title: "Защо златото все още има място",
-    lead: "XAUUSD не е лотария. Използвано разумно, златото може да стабилизира портфейл, когато валути и акции се люлеят.",
+    title: "Мястото на златото в един портфейл",
+    lead: "XAUUSD не е хазарт. Използвано разумно, златото може да стабилизира портфейл, когато валути и акции се движат нестабилно.",
     points: [
       {
-        title: "Твърд актив, глобално търсене",
-        body: "Централни банки и дългосрочни инвеститори държат злато като баласт, когато доверието в „хартиени“ активи намалява.",
+        title: "Твърд актив с глобално търсене",
+        body: "Централни банки и дългосрочни инвеститори традиционно държат злато като защита в периоди на несигурност.",
       },
       {
-        title: "Ликвидно почти денонощно",
-        body: "Златото се търгува почти 24 часа. Можеш да изразиш виждане без да чакаш едно борсово отваряне.",
+        title: "Ликвидност почти денонощно",
+        body: "Златото се търгува почти през целия ден, което позволява гъвкавост без зависимост от отваряне на конкретна борса.",
       },
       {
-        title: "Различни двигатели",
-        body: "Лихви, долар и апетит към риск движат златото на собствен ритъм — полезна диверсификация, не магия.",
+        title: "Собствена динамика",
+        body: "Лихвени проценти, доларът и общият апетит към риск движат златото по свой ритъм — реална диверсификация за портфейла.",
       },
     ],
   },
   method: {
     eyebrow: "Как работим",
-    title: "Бот, който можеш да следваш",
-    lead: "Четири години история зад правилата. Рискът расте с капитала, сесиите се филтрират, а годишният баланс остава зелен.",
+    title: "Автоматизация вместо решения",
+    lead: "Ръчните решения на пазара носят риск от грешка, а натрупани във времето, се отразяват на резултата. Затова следваме предварително зададена, тествана логика — без нужда вие да анализирате пазара или да вземате решения в реално време.",
     steps: [
       {
-        title: "Първо рискът",
-        body: "Размерът на позицията расте с капитала. Фиксиран процент от equity на идея и твърд таван на маржина.",
+        title: "Без импулсивни решения",
+        body: "Стратегията следва едни и същи правила, независимо от ситуацията. Без емоции, без изключения на момента.",
       },
       {
-        title: "Сесиите имат значение",
-        body: "Азия, Лондон и Ню Йорк се държат различно. Картографираме кога има смисъл вход — и кога да стоим настрана.",
+        title: "Без нужда от анализ",
+        body: "Не се налага да следите графики, индикатори или новини. Логиката е зададена предварително и се изпълнява автоматично.",
       },
       {
-        title: "Винаги печеливша година",
-        body: "В четирите календарни години с backing данни всяка година е затворена на плюс. Това е летвата, която показваме преди да се включиш под нас.",
+        title: "Постоянство във времето",
+        body: "Стратегията работи независимо дали сте пред екрана. Резултатите се натрупват постепенно, докато вие се занимавате с други неща.",
       },
     ],
   },
   results: {
-    eyebrow: "4-годишен track",
-    title: "Всяка година печеливша",
-    lead: "Четири пълни години backing данни. Превключвайте годишен и месечен изглед — демо цифри, докато реалната серия е готова.",
+    eyebrow: "Статистика",
+    title: "Резултатите говорят сами",
+    lead: "Проверете сами — един месец е достатъчен да прецените дали подходът работи за вас. По-долу е статистиката зад стратегията, с възможност за годишен и месечен изглед (демонстрационни стойности, докато реалните данни се синхронизират).",
     demoBadge: "ДЕМО · 4Г",
     colYear: "Година",
     colMonth: "Месец",
@@ -274,9 +291,9 @@ const bg: Dictionary = {
   community: {
     eyebrow: "Telegram",
     title: "Следвай акаунта, който следва бота",
-    lead: "Ние караме бота на нашия акаунт. Ти се свързваш под нас, учиш метода и виждаш същия печеливш track, който публикуваме.",
+    lead: "Ние караме бота на нашия акаунт. Ти се свързваш под нас, учиш метода и виждаш същия track, който публикуваме.",
     points: [
-      "Четири години зелени годишни резултати като референция",
+      "Един месец е достатъчен да прецениш подхода",
       "Бележки по метода на български и английски",
       "Партньорски път: кани други под своя линк, когато програмата стартира",
     ],
@@ -285,7 +302,7 @@ const bg: Dictionary = {
   partner: {
     eyebrow: "Растете с нас",
     title: "Свържи се под track, който печели",
-    lead: "Когато влезеш, си под нашата структура. Когато поканиш други, те са под твоята — същият бот, същите четири години backing.",
+    lead: "Когато влезеш, си под нашата структура. Когато поканиш други, те са под твоята — същата автоматизация.",
     points: [
       {
         title: "Един бот, едни правила",
@@ -293,7 +310,7 @@ const bg: Dictionary = {
       },
       {
         title: "Първо резултатите",
-        body: "Водим с таблицата на четирите печеливши години, за да е ясно защо си струва да се включат.",
+        body: "Водим с прозрачна статистика, за да е ясно защо си струва да се включат.",
       },
       {
         title: "Affiliate когато сме готови",
@@ -301,9 +318,16 @@ const bg: Dictionary = {
       },
     ],
   },
+  promoAd: {
+    label: "Ad",
+    title: "ZLATNA",
+    body: "Пробвай един месец. Копирай автоматизирания бот — постоянство вместо импулсивни решения.",
+    cta: "ВИЖ БОТА",
+    dismiss: "Затвори рекламата",
+  },
   footer: {
     disclaimer:
-      "Търговията със злато носи съществен риск от загуба. Минали или симулирани резултати не гарантират бъдещи. Zlatna предоставя образование и общностен контекст — не персонализиран инвестиционен съвет.",
+      "Търговията носи съществен риск от загуба. Минали или симулирани резултати не гарантират бъдещи. Zlatna предоставя образование и общностен контекст — не персонализиран инвестиционен съвет.",
     rights: "Zlatna — работно име",
   },
 };

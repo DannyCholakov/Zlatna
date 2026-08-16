@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { PromoAd } from "@/components/PromoAd";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { CommunitySection } from "@/components/sections/CommunitySection";
@@ -32,6 +33,7 @@ export default async function HomePage({
         <PartnerSection dict={dict} />
       </main>
       <SiteFooter locale={lang} dict={dict} />
+      <PromoAd dict={dict} />
     </>
   );
 }
